@@ -1,3 +1,8 @@
+/*
+	Copyright (C) 2019 Missingno_force a.k.a. Missingmew
+	See LICENSE for details.
+*/
+
 #include "stage-dictionary.h"
 
 /*	loads a dictionary name from path, allocating an array of dicentries at dic

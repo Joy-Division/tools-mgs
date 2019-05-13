@@ -1,3 +1,8 @@
+/*
+	Copyright (C) 2019 Missingno_force a.k.a. Missingmew
+	See LICENSE for details.
+*/
+
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>

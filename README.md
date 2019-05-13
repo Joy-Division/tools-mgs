@@ -1,5 +1,8 @@
-# ArmsDepot
+# Arms Depot
+
 Tools for working with files from Metal Gear Solid
+
+---------
 
 # Building and debugging
 
@@ -26,7 +29,7 @@ Minimal error checking is in place, but assume that any unexpected input will re
 # Overview of included tools
 
 ## dar-extract_*, qar-extract_psp, zar-extract
-Tools for unpacking archive files from the corresponding platform. dar-extract_psx supports dictionaries for giving proper names to the files within.  
+Tools for unpacking archive files from the corresponding platform. dar-extract_psx supports dictionaries for giving proper names to the files within.
 To use the dictionary feature, place a dictionary file ``somename.txt`` in the same folder as the executable, then use ``dar-extract_psx file somename``
 
 ## dat-extract_enc
@@ -47,7 +50,7 @@ Pass a string to compute its kojimahash for all known flavours.
 Tool to unpack MGS1 STAGE.DIR, supports dictionaries. See dat-extract_enc for naming convention.
 
 ## txp-convert
-Converts txp textures found in the psp games to png.
+Converts txp textures found in the PSP games to PNG.
 
 # Other code included
 
@@ -60,6 +63,8 @@ Contains functions to compute the hashes used for matching dictionaries against 
 # Notes
 
 MGS1 uses extremely weak 16bit hashing which is incredibly prone to collisions. If you build/use dictionaries with any MGS1 tool, make as much use of the separation by stage and store only surefire names in ``common``.  
-The 24bit hashing used in MGS2, 3, 4 and TTS is better, but still very likely to have collisions, tread with caution.  
-MGS1 and 2 only store the first character of the extension in the actual files. If no dictionary (entry) is found for a file, itll be saved with that single character intact.
+The 24bit hashing used in MGS2 succeeding games is better, but still very likely to have collisions, tread with caution.
+MGS1 and 2 only store the first character of the extension in the actual files. If no dictionary (entry) is found for a file, it'll be saved with that single character intact.
 
+# License
+Unless noted otherwise in a source file, see [LICENSE](LICENSE) for details. For bundled libraries, see above.

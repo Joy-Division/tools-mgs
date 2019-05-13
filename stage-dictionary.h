@@ -1,3 +1,8 @@
+/*
+	Copyright (C) 2019 Missingno_force a.k.a. Missingmew
+	See LICENSE for details.
+*/
+
 #ifndef STAGE_DICTIONARY_H_
 #define STAGE_DICTIONARY_H_
 #include <stdint.h>

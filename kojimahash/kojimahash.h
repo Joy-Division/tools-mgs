@@ -1,3 +1,8 @@
+/*
+	Copyright (C) 2019 Missingno_force a.k.a. Missingmew
+	See LICENSE for details.
+*/
+
 #ifndef KOJIMAHASH_H_
 #define KOJIMAHASH_H_
 
