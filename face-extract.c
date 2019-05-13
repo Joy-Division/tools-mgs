@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "kojimahash/kojimahash.h"
 #include "lodepng/lodepng.h"
+#include "stage-dictionary.h"
 
 #ifdef _WIN32
 #include <direct.h>
@@ -54,64 +55,29 @@ typedef struct {
 }__attribute__((packed)) imageinfo;
 
 typedef struct {
-	uint16_t hash;
-	uint16_t extension;
-	char name[32];
-} dicentry;
+	uint32_t hash;
+	uint32_t size;
+}__attribute__((packed)) fileentry;
 
-dicentry *commondic = NULL;
-unsigned int numcommondic = 0;
+dicentry *commondic = NULL, *stagedic = NULL;
+int numcommondic = 0, numstagedic = 0, numdicentries = 0;
 
-void loaddic(char *executable, char *name) {
-	FILE *f;
-	unsigned int i = 0;
-	char dicname[512], scanname[32], *token = NULL;
-	sprintf(dicname, "%s/%s.txt", executable, name);
-	if( !(f = fopen( dicname, "r" ))) {
-		printf("Couldnt open dictionary %s\n", dicname);
-		numcommondic = 0;
-		commondic = NULL;
-		return;
-	}
-	fgets(scanname, 32, f);
-	sscanf(scanname, "%u", &numcommondic);
-	commondic = malloc(sizeof(dicentry)*numcommondic);
-	i = 0;
-	while(i < numcommondic) {
-		fgets(scanname, 32, f);
-		while(strcspn(scanname, "\r\n") < strlen(scanname)) scanname[strcspn(scanname,"\r\n")] = 0;
-		strcpy(commondic[i].name, scanname);
-		
-		token = strtok(scanname, ".");
-		commondic[i].hash = hashstring16(token);
-		token = strtok(NULL, ".");
-		token[1] = 0;
-		commondic[i].extension = hashstring16(token);
-		printf("Added entry to stagedic: %s (%04x - %02x)\n", commondic[i].name, commondic[i].hash, commondic[i].extension);
-		i++;
-	}
-	printf("Read %d entries from dictionary %s.\n", numcommondic, dicname);
-	
-	fclose(f);
-	return;
-}
-
-unsigned int matchhash( uint16_t hash, uint16_t extension, dicentry *dictionary, unsigned int numentries ) {
-	unsigned int i;
+unsigned int matchhash( uint32_t hash, uint32_t extension, dicentry *dictionary, int numentries ) {
+	int i;
 	for( i = 0; i < numentries; i++ ) {
 		if((dictionary[i].hash == hash) && (dictionary[i].extension == extension)) return i;
 	}
 	return 0xFFFFFFFF;
 }
 
-char *getNameFromHash(uint16_t hash) {
+char *getNameFromDetails(uint16_t hash) {
 	char *retstring = malloc(32);
 	unsigned int result;
-	
 	result = matchhash(hash, hashstring16("p"), commondic, numcommondic);
 	if(result != 0xFFFFFFFF) sprintf(retstring, "%s", commondic[result].name);
-	else sprintf( retstring, "%04x.png", hash );
-	
+	else {
+		sprintf( retstring, "%04x.png", hash );
+	}
 	return retstring;
 }
 
@@ -166,8 +132,7 @@ int main( int argc, char **argv ) {
 	strcpy(execpath, argv[0]);
 	cleanExecPath(execpath);
 	
-	printf("loading dictionary %s/%s\n", execpath, "face");
-	loaddic(execpath, "face");
+	numcommondic = loaddic(&commondic, execpath, "mgs1-face", DIC_HASH_SINGLE_EXT, hashstring16);
 	
 	FILE *f;
 	
@@ -186,13 +151,12 @@ int main( int argc, char **argv ) {
 		createDirectory(dirname);
 		
 		fread(&numfaces, 4, 1, f);
-		//~ printf("numfaces %08x\n", numfaces);
 		faces = malloc(sizeof(faceinfo)*numfaces);
 		fread(faces, sizeof(faceinfo)*numfaces, 1, f);
 		
 		for(i = 0; i < numfaces; i++) {
-			//~ printf("group %d i: %d\n", groupnum, i);
-			namestring = getNameFromHash(faces[i].hash);
+			printf("group %d face %02d of %02d\r", groupnum, i+1, numfaces);
+			namestring = getNameFromDetails(faces[i].hash);
 			
 			data = malloc(faces[i].size);
 			fseek(f, datoffset+faces[i].offset+4, SEEK_SET);
@@ -234,6 +198,7 @@ int main( int argc, char **argv ) {
 			free(data);
 			free(namestring);
 		}
+		printf("\n");
 		free(faces);
 		if(ftell(f)%0x800) fseek(f, (0x800-(ftell(f)%0x800)), SEEK_CUR);
 		datoffset = ftell(f);

@@ -13,13 +13,13 @@ scripts: gcx-decompile.elf
 stage-extract.elf: $(KOJIMAHASH) $(STAGEDIC) stage-extract.c
 	$(CC) -Wall -g -o $@ $^
 	
-dar-extract_psx.elf: $(KOJIMAHASH) dar-extract_psx.c
+dar-extract_psx.elf: $(KOJIMAHASH) $(STAGEDIC) dar-extract_psx.c
 	$(CC) -Wall -g -o $@ $^
 	
 dat-extract_enc.elf: $(KOJIMAHASH) $(STAGEDIC) dat-extract_enc.c
 	$(CC) -Wall -g -o $@ $^ -lz
 	
-face-extract.elf: $(KOJIMAHASH) $(LODEPNG) face-extract.c
+face-extract.elf: $(KOJIMAHASH) $(LODEPNG) $(STAGEDIC) face-extract.c
 	$(CC) -Wall -g -o $@ $^
 	
 txp-convert.elf: $(LODEPNG) txp-convert.c
