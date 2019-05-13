@@ -4,13 +4,13 @@ LODEPNG = lodepng/lodepng.o
 
 all: archive dictionary graphics scripts
 archive: stages dar face-extract.elf zar-extract.elf qar-extract_psp.elf
-stages: stage-extract_complete.elf  dat-extract_enc.elf
+stages: stage-extract.elf  dat-extract_enc.elf
 dar: dar-extract_pc.elf dar-extract_psx.elf dar-extract_psp.elf
 dictionary: simple-hash.elf simple-hash-list.elf
 graphics: txp-convert.elf
 scripts: gcx-decompile.elf
 
-stage-extract_complete.elf: $(KOJIMAHASH) $(STAGEDIC) stage-extract_complete.c
+stage-extract.elf: $(KOJIMAHASH) $(STAGEDIC) stage-extract.c
 	$(CC) -Wall -g -o $@ $^
 	
 dar-extract_psx.elf: $(KOJIMAHASH) dar-extract_psx.c
