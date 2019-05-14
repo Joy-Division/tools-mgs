@@ -184,10 +184,12 @@ int unpackstage(FILE *f, uint32_t stageoffset, char *stagename) {
 		type = files[i].hash >> 24;
 		flags = (files[i].hash >> 16) & 0xFF;
 		flagstring = getInfoFromFlags(flags);
+		sprintf(outputname, "%s/%s", stagename, flagstring);
+		createDirectory(outputname);
 		hash = files[i].hash & 0xFFFF;
 		namestring = getNameFromDetails(hash, type, flags, texnum);
 		//~ printf("Info about file %d:\nType %02x(%s) - Flags %02x(%s) - Name %04x(%s)\n", i, type, typestring, flags, flagstring, hash, namestring);
-		sprintf(outputname, "%s/%s", stagename, namestring);
+		sprintf(outputname, "%s/%s/%s", stagename, flagstring, namestring);
 		//~ printf("Extracting file as %s\n", outputname);
 		fseek(f, fileoffsets[i], SEEK_SET);
 		if( !(o = fopen( outputname, "wb" ))) {
