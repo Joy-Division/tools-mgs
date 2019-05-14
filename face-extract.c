@@ -153,58 +153,60 @@ int main( int argc, char **argv ) {
 	while(datoffset<datsize) {
 		//~ printf("offset %08x\n", (unsigned int)ftell(f));
 		snprintf(dirname, 128, "%04d-%08x", groupnum, (unsigned int)ftell(f));
-		createDirectory(dirname);
 		
 		fread(&numfaces, 4, 1, f);
-		faces = malloc(sizeof(faceinfo)*numfaces);
-		fread(faces, sizeof(faceinfo)*numfaces, 1, f);
-		
-		for(i = 0; i < numfaces; i++) {
-			printf("group %d face %02d of %02d\r", groupnum, i+1, numfaces);
-			namestring = getNameFromDetails(faces[i].hash);
+		if(numfaces) {
+			createDirectory(dirname);
+			faces = malloc(sizeof(faceinfo)*numfaces);
+			fread(faces, sizeof(faceinfo)*numfaces, 1, f);
 			
-			data = malloc(faces[i].size);
-			fseek(f, datoffset+faces[i].offset+4, SEEK_SET);
-			fread(data, faces[i].size, 1, f);
-			
-			numframes = *(uint32_t *)data;
-			
-			if(numframes == 0x20) {
-				/* simple */
-				//~ printf("simple\n");
-				simpleoffsets = (uint32_t *)(data+4);
-				palsource = (uint16_t *)(data+32);
-				for(j = 0; j < 7; j++) {
-					if(simpleoffsets[j]) {
-						//~ printf("x");
-						image = (imageinfo *)(data+simpleoffsets[j]);
-						rgba = pixelsToRGBA(data+simpleoffsets[j]+4, palsource, image->w, image->h);
+			for(i = 0; i < numfaces; i++) {
+				printf("group %d face %02d of %02d\r", groupnum, i+1, numfaces);
+				namestring = getNameFromDetails(faces[i].hash);
+				
+				data = malloc(faces[i].size);
+				fseek(f, datoffset+faces[i].offset+4, SEEK_SET);
+				fread(data, faces[i].size, 1, f);
+				
+				numframes = *(uint32_t *)data;
+				
+				if(numframes == 0x20) {
+					/* simple */
+					//~ printf("simple\n");
+					simpleoffsets = (uint32_t *)(data+4);
+					palsource = (uint16_t *)(data+32);
+					for(j = 0; j < 7; j++) {
+						if(simpleoffsets[j]) {
+							//~ printf("x");
+							image = (imageinfo *)(data+simpleoffsets[j]);
+							rgba = pixelsToRGBA(data+simpleoffsets[j]+4, palsource, image->w, image->h);
+							snprintf(filename, 256, "%s/%03d-%02d-x%03d-y%03d-%s", dirname, i, j, image->x, image->y, namestring);
+							lodepng_encode32_file(filename, rgba, image->w, image->h);
+							free(rgba);
+						}
+						//~ else printf("-");
+					}
+					//~ printf("\n");
+				}
+				else {
+					/* full */
+					fullani = (animationinfo *)(data+4);
+					for(j = 0; j < numframes; j++) {
+						palsource = (uint16_t *)(data+fullani[j].palette);
+						image = (imageinfo *)(data+fullani[j].bitmap);
+						//~ printf("off %08x - w %03x - h %03d\n", fullani[j].bitmap+4, image->w, image->h);
+						rgba = pixelsToRGBA(data+fullani[j].bitmap+4, palsource, image->w, image->h);
 						snprintf(filename, 256, "%s/%03d-%02d-x%03d-y%03d-%s", dirname, i, j, image->x, image->y, namestring);
 						lodepng_encode32_file(filename, rgba, image->w, image->h);
 						free(rgba);
 					}
-					//~ else printf("-");
 				}
-				//~ printf("\n");
+				free(data);
+				free(namestring);
 			}
-			else {
-				/* full */
-				fullani = (animationinfo *)(data+4);
-				for(j = 0; j < numframes; j++) {
-					palsource = (uint16_t *)(data+fullani[j].palette);
-					image = (imageinfo *)(data+fullani[j].bitmap);
-					//~ printf("off %08x - w %03x - h %03d\n", fullani[j].bitmap+4, image->w, image->h);
-					rgba = pixelsToRGBA(data+fullani[j].bitmap+4, palsource, image->w, image->h);
-					snprintf(filename, 256, "%s/%03d-%02d-x%03d-y%03d-%s", dirname, i, j, image->x, image->y, namestring);
-					lodepng_encode32_file(filename, rgba, image->w, image->h);
-					free(rgba);
-				}
-			}
-			free(data);
-			free(namestring);
+			printf("\n");
+			free(faces);
 		}
-		printf("\n");
-		free(faces);
 		if(ftell(f)%0x800) fseek(f, (0x800-(ftell(f)%0x800)), SEEK_CUR);
 		datoffset = ftell(f);
 		groupnum++;
