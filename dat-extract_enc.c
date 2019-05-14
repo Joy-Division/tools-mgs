@@ -870,7 +870,7 @@ int main( int argc, char **argv ) {
 				dathead = datheadbig;
 				flags |= (GAME_TTS|GAME_MGS2|COMPRESSED);
 				
-				getDictionary(&commondic, &numcommondic, execpath, "common-tts", flags);
+				getDictionary(&commondic, &numcommondic, execpath, "tts-common", flags);
 				
 				break;
 			}
@@ -880,7 +880,7 @@ int main( int argc, char **argv ) {
 				printf("MGS2 DAT detected based on game hash\n");
 				flags |= (GAME_MGS2 | ((flags & ENCRYPTED) ? COMPRESSED : 0));
 				
-				getDictionary(&commondic, &numcommondic, execpath, "common-mgs2", flags);
+				getDictionary(&commondic, &numcommondic, execpath, "mgs2-common", flags);
 				break;
 			}
 			case 0x0000:	/* THIS MAY EXPLODE HORRIBLY POSSIBLY EVENTUALLY
@@ -895,13 +895,13 @@ int main( int argc, char **argv ) {
 					if(datheadbig->version != 1) BREAK("unexpected version, not 1\n");
 					flags |= (GAME_MGS4|COMPRESSED);
 					
-					getDictionary(&commondic, &numcommondic, execpath, "common-mgs4", flags);
+					getDictionary(&commondic, &numcommondic, execpath, "mgs4-common", flags);
 				}
 				else { /* LE thing for MGS3, see comment for case 0x0000 */
 					printf("MGS3 DAT detected based on game hash\n");
 					flags |= (GAME_MGS3|COMPRESSED);
 					
-					getDictionary(&commondic, &numcommondic, execpath, "common-mgs3", flags);
+					getDictionary(&commondic, &numcommondic, execpath, "mgs3-common", flags);
 				}
 				break;
 			}
@@ -909,7 +909,7 @@ int main( int argc, char **argv ) {
 				printf("ZOE2 DAT detected based on game hash\n");
 				flags |= (GAME_ZOE2|COMPRESSED);
 				
-				getDictionary(&commondic, &numcommondic, execpath, "common-zoe2", flags);
+				getDictionary(&commondic, &numcommondic, execpath, "zoe2-common", flags);
 				break;
 			}
 			default: {
@@ -978,13 +978,13 @@ int main( int argc, char **argv ) {
 	
 	for(i = 0; i < dathead->numStages; i++) {
 		createDirectory(stages[i].name);
-		strcpy(stagename, stages[i].name);
-		if(flags & TRIALSTAGE) strcat(stagename, "-trial2");
-		else if(flags & GAME_TTS) strcat(stagename, "-tts");
-		else if(flags & GAME_MGS2) strcat(stagename, "-mgs2");
-		else if(flags & GAME_MGS3) strcat(stagename, "-mgs3");
-		else if(flags & GAME_MGS4) strcat(stagename, "-mgs4");
-		else if(flags & GAME_ZOE2) strcat(stagename, "-zoe2");
+		if(flags & TRIALSTAGE) strcpy(stagename, "trial2-");
+		else if(flags & GAME_TTS) strcpy(stagename, "tts-");
+		else if(flags & GAME_MGS2) strcpy(stagename, "mgs2-");
+		else if(flags & GAME_MGS3) strcpy(stagename, "mgs3-");
+		else if(flags & GAME_MGS4) strcpy(stagename, "mgs4-");
+		else if(flags & GAME_ZOE2) strcpy(stagename, "zoe2-");
+		strcat(stagename, stages[i].name);
 		getDictionary(&stagedic, &numstagedic, execpath, stagename, flags);
 		
 		processInfoWithStage(f, infolist[i], stages[i], flags);
