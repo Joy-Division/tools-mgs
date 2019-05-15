@@ -3,7 +3,7 @@ STAGEDIC = stage-dictionary.o
 LODEPNG = lodepng/lodepng.o
 
 all: archive dictionary graphics scripts
-archive: stages dar face-extract.elf zar-extract.elf qar-extract_psp.elf
+archive: stages dar face-extract.elf zar-extract.elf qar-extract_psp.elf dat-merge.elf
 stages: stage-extract.elf  dat-extract_enc.elf
 dar: dar-extract_pc.elf dar-extract_psx.elf dar-extract_psp.elf
 dictionary: simple-hash.elf simple-hash-list.elf

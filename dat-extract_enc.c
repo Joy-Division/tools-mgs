@@ -764,7 +764,7 @@ int main( int argc, char **argv ) {
 	uint32_t *headvals = NULL;
 	
 	if ( argc < 2 ) {
-		printf("Not enough args!\nUse: %s DAT-file\n", argv[0]);
+		printf("Not enough args!\nUse: %s DAT-file [id-override]\n", argv[0]);
 		return 1;
 	}
 	if( argc == 3 ) {
@@ -870,17 +870,18 @@ int main( int argc, char **argv ) {
 				dathead = datheadbig;
 				flags |= (GAME_TTS|GAME_MGS2|COMPRESSED);
 				
-				getDictionary(&commondic, &numcommondic, execpath, "tts-common", flags);
+				getDictionary(&commondic, &numcommondic, execpath, "common-tts", flags);
 				
 				break;
 			}
 			case 0x4010:
 			case 0x4016:
+			case 0x610A:
 			case 0x2ABB: {
 				printf("MGS2 DAT detected based on game hash\n");
 				flags |= (GAME_MGS2 | ((flags & ENCRYPTED) ? COMPRESSED : 0));
 				
-				getDictionary(&commondic, &numcommondic, execpath, "mgs2-common", flags);
+				getDictionary(&commondic, &numcommondic, execpath, "common-mgs2", flags);
 				break;
 			}
 			case 0x0000:	/* THIS MAY EXPLODE HORRIBLY POSSIBLY EVENTUALLY
@@ -890,18 +891,26 @@ int main( int argc, char **argv ) {
 			case 0x0025:
 			case 0x0063:
 			case 0x4015:
-			case 0x4212: {
-				if(flags & IS_BIGENDIAN) { /* BE thing for MGS4 */
-					if(datheadbig->version != 1) BREAK("unexpected version, not 1\n");
-					flags |= (GAME_MGS4|COMPRESSED);
-					
-					getDictionary(&commondic, &numcommondic, execpath, "mgs4-common", flags);
+			case 0x4212: { // FOR THIS ONE AS WELL... (see below)
+				if(flags & ENCRYPTED) {
+					if(flags & IS_BIGENDIAN) { /* BE thing for MGS4 */
+						if(datheadbig->version != 1) BREAK("unexpected version, not 1\n");
+						flags |= (GAME_MGS4|COMPRESSED);
+						
+						getDictionary(&commondic, &numcommondic, execpath, "common-mgs4", flags);
+					}
+					else { /* LE thing for MGS3, see comment for case 0x0000 */
+						printf("MGS3 DAT detected based on game hash\n");
+						flags |= (GAME_MGS3|COMPRESSED);
+						
+						getDictionary(&commondic, &numcommondic, execpath, "common-mgs3", flags);
+					}
 				}
-				else { /* LE thing for MGS3, see comment for case 0x0000 */
-					printf("MGS3 DAT detected based on game hash\n");
-					flags |= (GAME_MGS3|COMPRESSED);
+				else { // WHY DOES THE XBOX ONE SHARE AN ID WITH MGS3 >:(
+					printf("MGS2 DAT detected based on game hash\n");
+					flags |= GAME_MGS2;
 					
-					getDictionary(&commondic, &numcommondic, execpath, "mgs3-common", flags);
+					getDictionary(&commondic, &numcommondic, execpath, "common-mgs2", flags);
 				}
 				break;
 			}
@@ -909,7 +918,7 @@ int main( int argc, char **argv ) {
 				printf("ZOE2 DAT detected based on game hash\n");
 				flags |= (GAME_ZOE2|COMPRESSED);
 				
-				getDictionary(&commondic, &numcommondic, execpath, "zoe2-common", flags);
+				getDictionary(&commondic, &numcommondic, execpath, "common-zoe2", flags);
 				break;
 			}
 			default: {

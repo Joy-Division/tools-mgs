@@ -239,7 +239,7 @@ int main( int argc, char **argv ) {
 	fread(&numstages, 4, 1, f);
 	numstages /= 12;
 	
-	numcommondic = loaddic(&commondic, execpath, "mgs1-common", DIC_HASH_SINGLE_EXT, hashstring16);
+	numcommondic = loaddic(&commondic, execpath, "common-mgs1", DIC_HASH_SINGLE_EXT, hashstring16);
 	if(numcommondic > 0) numdicentries = numcommondic;
 	for(i = 0;i < numstages;i++) {
 		fseek(f, 4+(12*i), SEEK_SET);

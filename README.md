@@ -34,8 +34,14 @@ To use the dictionary feature, place a dictionary file ``somename.txt`` in the s
 
 ## dat-extract_enc
 Tool for unpacking STAGE.DAT and FACE.DAT from MGS2, MGS3, MGS4, ZoE2 and MGS Twin Snakes.
-Supports dictionaries, place a file called ``common.txt`` or one matching a stages name in the same folder as the executable, prefix its name with your game (e.g. ``mgs2-``, ``trial2-``, ``tts-``, etc.).
+Supports dictionaries, place a file called ``common.txt``, suffixed with the game name, or one matching a stages name in the same folder as the executable, prefixes with your game name (e.g. ``mgs2-``, ``trial2-``, ``tts-``, etc.).
 Dictionaries will be loaded automatically and do not need to be passed by hand.
+If a file fails with the autodetection (either missing or mismatched game ID), you can pass an ID as additional argument to override the autodetection. Use this at your own risk, check the code (specifically the switch around line 870) for IDs.
+
+## dat-merge
+Tool to unpack the files from the on-disc VFS from MGS2S on Xbox. Currently, this requires the VFS files to be merged by hand.  
+To do so, simply concatenate the files, e.g. ``cat disc1{0..8}.dat > disc1.dat`` or ``copy /B disc1_0.dat + disc1_1.dat + [...] + disc1_8.dat disc1.dat``.
+Then pass the resulting disc1.dat to dat-merge. Follow the same procedure for disc2_*.dat. The unpacked files can be unpacked just like the files from the PS2 games.
 
 ## face-extract
 Tool for unpacking MGS1 FACE.DAT, supports a dictionary as well. Place one with the name ``mgs1-face.txt`` next to the executable.
