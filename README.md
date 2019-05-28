@@ -40,7 +40,7 @@ If a file fails with the autodetection (either missing or mismatched game ID), y
 
 ## dat-merge
 Tool to unpack the files from the on-disc VFS from MGS2S on Xbox. Currently, this requires the VFS files to be merged by hand. Remember to back-up your files before doing this.  
-To do so, simply concatenate the files, e.g. ``cat disc1{0..8}.dat > disc1.dat`` or ``copy /B disc1_0.dat + disc1_1.dat + [...] + disc1_8.dat disc1.dat``.
+To do so, simply concatenate the files, e.g. ``cat disc1_{0..8}.dat > disc1.dat`` or ``copy /B disc1_0.dat + disc1_1.dat + [...] + disc1_8.dat disc1.dat``.
 Then pass the resulting disc1.dat to dat-merge. Follow the same procedure for disc2_*.dat. The unpacked files can be unpacked just like the files from the PS2 games.
 
 ## face-extract
