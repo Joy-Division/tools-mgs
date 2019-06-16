@@ -76,10 +76,10 @@ unsigned int matchhash( uint32_t hash, uint32_t extension, dicentry *dictionary,
 char *getInfoFromFlags(unsigned int flags) {
 	char *retstring = malloc(16);
 	switch(flags) {
-		case 0x63: RETPRINT("cache")
-		case 0x6E: RETPRINT("nocache")
-		case 0x72: RETPRINT("resident")
-		case 0x73: RETPRINT("sound-nocache")
+		case 'c' : RETPRINT("cache")
+		case 'n' : RETPRINT("nocache")
+		case 'r' : RETPRINT("resident")
+		case 's' : RETPRINT("sound")
 		default: {
 			sprintf( retstring, "%02x", flags );
 			break;
