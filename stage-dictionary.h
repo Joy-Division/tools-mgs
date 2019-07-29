@@ -17,10 +17,10 @@ typedef struct {
 } dicentry;
 
 enum dic_flags {
-	DIC_HASH_FULL_NAME =	(1<<0),
-	DIC_HASH_SINGLE_EXT =	(1<<1),
-	DIC_USE_EXTERNAL =	(1<<2),
-	DIC_ADJUST_EXT_MGS2 =	(1<<3),
+	DIC_HASH_FULL_NAME  = (1<<0),
+	DIC_HASH_SINGLE_EXT = (1<<1),
+	DIC_USE_EXTERNAL    = (1<<2),
+	DIC_ADJUST_EXT_MGS2 = (1<<3),
 	DIC_NUMFLAGS
 };
 	
