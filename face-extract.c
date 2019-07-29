@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include "kojimahash/kojimahash.h"
+#include "strcode/strcode.h"
 #include "lodepng/lodepng.h"
 #include "stage-dictionary.h"
 
@@ -78,7 +78,7 @@ unsigned int matchhash( uint32_t hash, uint32_t extension, dicentry *dictionary,
 char *getNameFromDetails(uint16_t hash) {
 	char *retstring = malloc(32);
 	unsigned int result;
-	result = matchhash(hash, hashstring16("p"), commondic, numcommondic);
+	result = matchhash(hash, StrCode16("p"), commondic, numcommondic);
 	if(result != 0xFFFFFFFF) sprintf(retstring, "%s", commondic[result].name);
 	else {
 		sprintf( retstring, "%04x.png", hash );
@@ -137,7 +137,7 @@ int main( int argc, char **argv ) {
 	strcpy(execpath, argv[0]);
 	cleanExecPath(execpath);
 	
-	numcommondic = loaddic(&commondic, execpath, "mgs1-face", DIC_HASH_SINGLE_EXT, hashstring16);
+	numcommondic = loaddic(&commondic, execpath, "mgs1-face", DIC_HASH_SINGLE_EXT, StrCode16);
 	
 	FILE *f;
 	

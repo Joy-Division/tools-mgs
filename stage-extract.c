@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include "kojimahash/kojimahash.h"
+#include "strcode/strcode.h"
 #include "stage-dictionary.h"
 
 #ifdef _WIN32
@@ -239,7 +239,7 @@ int main( int argc, char **argv ) {
 	fread(&numstages, 4, 1, f);
 	numstages /= 12;
 	
-	numcommondic = loaddic(&commondic, execpath, "common-mgs1", DIC_HASH_SINGLE_EXT, hashstring16);
+	numcommondic = loaddic(&commondic, execpath, "common-mgs1", DIC_HASH_SINGLE_EXT, StrCode16);
 	if(numcommondic > 0) numdicentries = numcommondic;
 	for(i = 0;i < numstages;i++) {
 		fseek(f, 4+(12*i), SEEK_SET);
@@ -250,7 +250,7 @@ int main( int argc, char **argv ) {
 		offset *= BLOCKSIZE;
 		printf("Current stage: %s - offset: %08x\n", name, offset);
 		createDirectory(name);
-		numstagedic = loaddic(&stagedic, execpath, dicname, DIC_HASH_SINGLE_EXT, hashstring16);
+		numstagedic = loaddic(&stagedic, execpath, dicname, DIC_HASH_SINGLE_EXT, StrCode16);
 		if(numstagedic > 0) numdicentries += numstagedic;
 		unpackstage(f, offset, name);
 		if(stagedic) free(stagedic);

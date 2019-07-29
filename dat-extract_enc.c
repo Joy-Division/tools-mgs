@@ -11,7 +11,7 @@
 
 #include <zlib.h>
 
-#include "kojimahash/kojimahash.h"
+#include "strcode/strcode.h"
 #include "stage-dictionary.h"
 
 
@@ -173,10 +173,10 @@ char *datHeaderInfoString = "builddate %s UTC (%08x) - version %04x - numblocks 
 void getDictionary(dicentry **dic, int *num, char *path, char *name, unsigned int flags) {
 	char tempname[256], *token = NULL;
 	int i, j;
-	if(flags & GAME_MGS2) *num = loaddic(dic, path, name, DIC_HASH_SINGLE_EXT | DIC_ADJUST_EXT_MGS2, hashstring24);
-	if(flags & GAME_ZOE2) *num = loaddic(dic, path, name, DIC_HASH_FULL_NAME, hashstring32);
+	if(flags & GAME_MGS2) *num = loaddic(dic, path, name, DIC_HASH_SINGLE_EXT | DIC_ADJUST_EXT_MGS2, StrCode24);
+	if(flags & GAME_ZOE2) *num = loaddic(dic, path, name, DIC_HASH_FULL_NAME, StrCode32);
 	if(flags & (GAME_MGS3|GAME_MGS4)) {
-		*num = loaddic(dic, path, name, DIC_USE_EXTERNAL, hashstring24);
+		*num = loaddic(dic, path, name, DIC_USE_EXTERNAL, StrCode24);
 		for(i = 0; i < *num; i++) {
 			strcpy(tempname, (*dic)[i].name);
 			token = strtok(tempname, ".");
@@ -207,7 +207,7 @@ char *getExtensionFromHash32(uint32_t hash) {
 	memset(retstring, 0, 16);
 	unsigned int i, testhash;
 	for(i = 0; i < 27; i++) {
-		testhash = hashstring32(extListZoe2[i]);
+		testhash = StrCode32(extListZoe2[i]);
 		if(testhash == hash) RETPRINT(extListZoe2[i])
 	}
 	if(strlen(retstring) < 3) sprintf(retstring, "%08x", hash);
@@ -274,8 +274,8 @@ unsigned int decryptStage(unsigned char *data, unsigned int length, char *name, 
 	uint32_t *values = (uint32_t *)data;
 	uint32_t seed, workkey, namehash, workkeyt;
 	unsigned int i;
-	if(flags & GAME_ZOE2) namehash = hashstring32(name);
-	else namehash = hashstring24(name);
+	if(flags & GAME_ZOE2) namehash = StrCode32(name);
+	else namehash = StrCode24(name);
 	workkeyt = (namehash << 0x07) + namehash + key2;
 	if(flags & IS_BIGENDIAN) workkey = (namehash << 0x07) + initialkeybig + namehash + key34;
 	else workkey = (namehash << 0x07) + initialkey + namehash + key34;

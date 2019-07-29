@@ -1,4 +1,4 @@
-KOJIMAHASH = kojimahash/kojimahash.o
+STRCODE = strcode/strcode.o
 STAGEDIC = stage-dictionary.o
 LODEPNG = lodepng/lodepng.o
 
@@ -10,16 +10,16 @@ dictionary: simple-hash.elf simple-hash-list.elf
 graphics: txp-convert.elf
 scripts: gcx-decompile.elf
 
-stage-extract.elf: $(KOJIMAHASH) $(STAGEDIC) stage-extract.c
+stage-extract.elf: $(STRCODE) $(STAGEDIC) stage-extract.c
 	$(CC) -Wall -g -o $@ $^
 	
-dar-extract_psx.elf: $(KOJIMAHASH) $(STAGEDIC) dar-extract_psx.c
+dar-extract_psx.elf: $(STRCODE) $(STAGEDIC) dar-extract_psx.c
 	$(CC) -Wall -g -o $@ $^
 	
-dat-extract_enc.elf: $(KOJIMAHASH) $(STAGEDIC) dat-extract_enc.c
+dat-extract_enc.elf: $(STRCODE) $(STAGEDIC) dat-extract_enc.c
 	$(CC) -Wall -g -o $@ $^ -lz
 	
-face-extract.elf: $(KOJIMAHASH) $(LODEPNG) $(STAGEDIC) face-extract.c
+face-extract.elf: $(STRCODE) $(LODEPNG) $(STAGEDIC) face-extract.c
 	$(CC) -Wall -g -o $@ $^
 	
 txp-convert.elf: $(LODEPNG) txp-convert.c
@@ -28,10 +28,10 @@ txp-convert.elf: $(LODEPNG) txp-convert.c
 zar-extract.elf: zar-extract.c
 	$(CC) -Wall -g -o $@ $^ -lz
 
-simple-hash.elf: $(KOJIMAHASH) simple-hash.c
+simple-hash.elf: $(STRCODE) simple-hash.c
 	$(CC) -Wall -g -o $@ $^
 	
-simple-hash-list.elf: $(KOJIMAHASH) simple-hash-list.c
+simple-hash-list.elf: $(STRCODE) simple-hash-list.c
 	$(CC) -Wall -g -o $@ $^
 
 %.elf: %.c
@@ -41,4 +41,4 @@ simple-hash-list.elf: $(KOJIMAHASH) simple-hash-list.c
 	$(CC) -c -Wall -g -o $@ $<
 	
 clean:
-	-rm *.elf *.o kojimahash/*.o lodepng/*.o
+	-rm *.elf *.o strcode/*.o lodepng/*.o

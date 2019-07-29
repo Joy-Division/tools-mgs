@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include "kojimahash/kojimahash.h"
+#include "strcode/strcode.h"
 
 #define BREAK(x) { printf(x); return 1; }
 
@@ -41,9 +41,9 @@ int main( int argc, char** argv ) {
 		if(!(strncmp(scanname, "//", 2))) fprintf(tout, "%s", scanname);
 		else {
 			scanname[strcspn(scanname,"\r\n")] = 0;
-			hash1 = hashstring16(scanname);
-			hash2 = hashstring24(scanname);
-			hash3 = hashstring32(scanname);
+			hash1 = StrCode16(scanname);
+			hash2 = StrCode24(scanname);
+			hash3 = StrCode32(scanname);
 			fprintf(tout, "%-21s %04x %06x %08x\n", scanname, hash1, hash2, hash3);
 		}
 	}

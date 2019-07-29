@@ -1,4 +1,4 @@
-KOJIMAHASH = kojimahash/kojimahash.o
+STRCODE = strcode/strcode.o
 STAGEDIC = stage-dictionary.o
 LODEPNG = lodepng/lodepng.o
 
@@ -10,16 +10,16 @@ dictionary: simple-hash.exe simple-hash-list.exe
 graphics: txp-convert.exe
 scripts: gcx-decompile.exe
 
-stage-extract.exe: $(KOJIMAHASH) $(STAGEDIC) stage-extract.c
+stage-extract.exe: $(STRCODE) $(STAGEDIC) stage-extract.c
 	$(CC) -Wall -g -o $@ $^
 	
-dar-extract_psx.exe: $(KOJIMAHASH) $(STAGEDIC) dar-extract_psx.c
+dar-extract_psx.exe: $(STRCODE) $(STAGEDIC) dar-extract_psx.c
 	$(CC) -Wall -g -o $@ $^
 	
-dat-extract_enc.exe: $(KOJIMAHASH) $(STAGEDIC) dat-extract_enc.c
+dat-extract_enc.exe: $(STRCODE) $(STAGEDIC) dat-extract_enc.c
 	$(CC) -Wall -g -o $@ $^ -lz
 	
-face-extract.exe: $(KOJIMAHASH) $(LODEPNG) $(STAGEDIC) face-extract.c
+face-extract.exe: $(STRCODE) $(LODEPNG) $(STAGEDIC) face-extract.c
 	$(CC) -Wall -g -o $@ $^
 	
 txp-convert.exe: $(LODEPNG) txp-convert.c
@@ -28,10 +28,10 @@ txp-convert.exe: $(LODEPNG) txp-convert.c
 zar-extract.exe: zar-extract.c
 	$(CC) -Wall -g -o $@ $^ -lz
 
-simple-hash.exe: $(KOJIMAHASH) simple-hash.c
+simple-hash.exe: $(STRCODE) simple-hash.c
 	$(CC) -Wall -g -o $@ $^
 	
-simple-hash-list.exe: $(KOJIMAHASH) simple-hash-list.c
+simple-hash-list.exe: $(STRCODE) simple-hash-list.c
 	$(CC) -Wall -g -o $@ $^
 
 %.exe: %.c
@@ -41,4 +41,4 @@ simple-hash-list.exe: $(KOJIMAHASH) simple-hash-list.c
 	$(CC) -c -Wall -g -o $@ $<
 	
 clean:
-	-rm *.exe *.o kojimahash/*.o lodepng/*.o
+	-rm *.exe *.o strcode/*.o lodepng/*.o

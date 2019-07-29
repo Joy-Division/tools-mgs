@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include "kojimahash/kojimahash.h"
+#include "strcode/strcode.h"
 #include "stage-dictionary.h"
 
 #define RETPRINT(x) { sprintf (retstring, "%s", x); break; }
@@ -87,7 +87,7 @@ int main( int argc, char **argv ) {
 		strcpy(execpath, argv[0]);
 		*strrchr(execpath, '/') = 0;
 		
-		numcommondic = loaddic(&commondic, execpath, argv[2], DIC_HASH_SINGLE_EXT, hashstring16);
+		numcommondic = loaddic(&commondic, execpath, argv[2], DIC_HASH_SINGLE_EXT, StrCode16);
 	}
 	
 	FILE *f, *o;
