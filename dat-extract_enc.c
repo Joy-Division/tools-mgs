@@ -100,8 +100,7 @@ int numcommondic = 0, numstagedic = 0, numdicentries = 0;
 /* mgs3 is 0, mgs4 is 1 */
 /* apparently 0x60 is slot as well, but this breaks things */
 char *extList[2][256] = {
-{
-/* METAL GEAR SOLID 3 */
+{ /* METAL GEAR SOLID 3 */
 /* ------ 00 ----- 01 ----- 02 ----- 03 ----- 04 ----- 05 ----- 06 ----- 07 ----- 08 ----- 09 ----- 0a ----- 0b ----- 0c ----- 0d ----- 0e ----- 0f */
 /* 00 */ "sar"  , "bin"  , "gcx"  , "tri"  , "mdh"  , "mds"  , "lt2"  , "cv2"  , "mtar" , "mtsq" , "mtfa" , "mtcm" , "geom" , "mdl"  , "0e"   , "nav"  ,
 /* 10 */ "cvd"  , "eft"  , "zon"  , "rpd"  , "14"   , "15"   , "16"   , "17"   , "18"   , "19"   , "1a"   , "1b"   , "1c"   , "1d"   , "1e"   , "1f"   ,
@@ -119,8 +118,7 @@ char *extList[2][256] = {
 /* d0 */ "d0"   , "d1"   , "d2"   , "d3"   , "d4"   , "d5"   , "d6"   , "d7"   , "d8"   , "d9"   , "da"   , "db"   , "dc"   , "dd"   , "de"   , "df"   ,
 /* e0 */ "e0"   , "e1"   , "e2"   , "e3"   , "e4"   , "e5"   , "e6"   , "e7"   , "e8"   , "e9"   , "ea"   , "eb"   , "ec"   , "ed"   , "ee"   , "ef"   ,
 /* f0 */ "dar"  , "qar"  , "cnf"  , "f3"   , "f4"   , "f5"   , "f6"   , "f7"   , "f8"   , "f9"   , "fa"   , "fb"   , "fc"   , "fd"   , "fe"   , "psq"  },
-{
-/* METAL GEAR SOLID 4 */
+{ /* METAL GEAR SOLID 4 */
 /* ------ 00 ----- 01 ----- 02 ----- 03 ----- 04 ----- 05 ----- 06 ----- 07 ----- 08 ----- 09 ----- 0a ----- 0b ----- 0c ----- 0d ----- 0e ----- 0f */
 /* 00 */ "sar"  , "bin"  , "gcx"  , "txn"  , "mdh"  , "mds"  , "lt3"  , "cv2"  , "mtar" , "mtsq" , "mtfa" , "mtcm" , "geom" , "mdn"  , "0e"   , "nav"  ,
 /* 10 */ "van"  , "cnp"  , "zon"  , "rpd"  , "abc"  , "nv2"  , "spu"  , "fcv"  , "phs"  , "eqpp" , "phpr" , "phes" , "sds"  , "vab"  , "ssp"  , "rvb"  ,
@@ -139,8 +137,7 @@ char *extList[2][256] = {
 /* e0 */ "e0"   , "e1"   , "e2"   , "e3"   , "e4"   , "e5"   , "e6"   , "e7"   , "e8"   , "e9"   , "ea"   , "eb"   , "ec"   , "ed"   , "ee"   , "ef"   ,
 /* f0 */ "dar"  , "qar"  , "cnf"  , "f3"   , "f4"   , "f5"   , "f6"   , "f7"   , "f8"   , "f9"   , "fa"   , "fb"   , "fc"   , "fd"   , "fe"   , "psq"  },
 #if 0 // define when PW is supported
-{
-/* METAL GEAR SOLID: PEACE WALKER */
+{ /* METAL GEAR SOLID: PEACE WALKER */
 /* ------ 00 ----- 01 ----- 02 ----- 03 ----- 04 ----- 05 ----- 06 ----- 07 ----- 08 ----- 09 ----- 0a ----- 0b ----- 0c ----- 0d ----- 0e ----- 0f */
 /* 00 */ "00"   , "bin"  , "gcx"  , "tri"  , "mdh"  , "mds"  , "lt2"  , "cv2"  , "mtar" , "mtsq" , "mtfa" , "mtcm" , "geom" , "0d"   , "0e"   , "nav"  ,
 /* 10 */ "cvd"  , "eft"  , "zon"  , "mdp"  , "txp"  , "kms"  , "rpd"  , "fcx"  , "mtst" , "mdpb" , "mdpe" , "dcd"  , "ypk"  , "spk"  , "ohd"  , "mmd"  ,
@@ -161,10 +158,38 @@ char *extList[2][256] = {
 #endif
 };
 
-char *extListZoe2[] = {
-	"var", "rpd", "atr", "o2d", "mts", "eft", "scx", "pic", "ric", "hz2", "trz",
-	"lit", "tex", "brk", "hzt", "mdz", "mtz", "cvz", "mdl", "mtl", "fnt", "nhz",
-	"mfl", "flw", "ene", "row", "bin"
+//! Must match the number of elements in extListZoe2
+#define ZOE2_NUM_EXT  27
+
+// TODO: Sort by frequency for faster matching
+char *extListZoe2[ ZOE2_NUM_EXT ] = {
+/* 0x00000e56 */ "var",
+/* 0x0000321e */ "rpd",
+/* 0x00004b0e */ "atr",
+/* 0x000054d5 */ "o2d",
+/* 0x0000856a */ "mts",
+/* 0x00037e6b */ "eft",
+/* 0x000863be */ "scx",
+/* 0x000ffdf4 */ "pic", /* SoftImage PIC image */
+/* 0x00104639 */ "ric",
+/* 0x0010abbd */ "hz2",
+/* 0x001373d8 */ "trz",
+/* 0x001ced17 */ "lit",
+/* 0x001e5452 */ "tex",
+/* 0x002216e1 */ "brk",
+/* 0x0037b1e7 */ "hzt",
+/* 0x003b12fb */ "mdz",
+/* 0x003b530d */ "mtz",
+/* 0x00cb3b7a */ "cvz",
+/* 0x00ec22b5 */ "mdl",
+/* 0x00ed22c7 */ "mtl",
+/* 0x03696528 */ "fnt",
+/* 0x03799c56 */ "nhz",
+/* 0x038ab1d7 */ "mfl",
+/* 0x066e60c1 */ "flw",
+/* 0x0688d9eb */ "ene",
+/* 0x398168e9 */ "row",
+/* 0x62877d7f */ "bin"
 };
 
 char *dateTimeString = "%d.%m.%Y %H:%M:%S";
@@ -206,7 +231,7 @@ char *getExtensionFromHash32(uint32_t hash) {
 	char *retstring = malloc(16);
 	memset(retstring, 0, 16);
 	unsigned int i, testhash;
-	for(i = 0; i < 27; i++) {
+	for(i = 0; i < ZOE2_NUM_EXT; i++) {
 		testhash = StrCode32(extListZoe2[i]);
 		if(testhash == hash) RETPRINT(extListZoe2[i])
 	}
