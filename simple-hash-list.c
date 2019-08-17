@@ -44,7 +44,7 @@ int main( int argc, char** argv ) {
 			hash1 = StrCode16(scanname);
 			hash2 = StrCode24(scanname);
 			hash3 = StrCode32(scanname);
-			fprintf(tout, "%-21s %04x %06x %08x\n", scanname, hash1, hash2, hash3);
+			fprintf(tout, "%-21s %04x %08x %08x\n", scanname, hash1, hash2, hash3);
 		}
 	}
 	
