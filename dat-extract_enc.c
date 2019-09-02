@@ -68,15 +68,15 @@ enum games {
 };
 
 enum flags {
-	GAME_MGS2 =	(1<<0),
-	GAME_MGS3 =	(1<<1),
-	GAME_MGS4 =	(1<<2),
-	GAME_ZOE2 =	(1<<3),
-	GAME_TTS = 	(1<<4),
-	GAME_MGS3S = 	(1<<5),
-	TRIALSTAGE =	(1<<6),
-	ENCRYPTED =	(1<<7),
-	COMPRESSED =	(1<<8),
+	GAME_MGS2  = (1<<0),
+	GAME_MGS3  = (1<<1),
+	GAME_MGS4  = (1<<2),
+	GAME_ZOE2  = (1<<3),
+	GAME_TTS   = (1<<4),
+	GAME_MGS3S = (1<<5),
+	TRIALSTAGE = (1<<6),
+	ENCRYPTED  = (1<<7),
+	COMPRESSED = (1<<8),
 	NUMFLAGS
 };
 
@@ -161,35 +161,35 @@ char *extList[2][256] = {
 //! Must match the number of elements in extListZoe2
 #define ZOE2_NUM_EXT  27
 
-// TODO: Sort by frequency for faster matching
 char *extListZoe2[ ZOE2_NUM_EXT ] = {
-/* 0x00000e56 */ "var",
-/* 0x0000321e */ "rpd",
-/* 0x00004b0e */ "atr",
-/* 0x000054d5 */ "o2d",
-/* 0x0000856a */ "mts",
-/* 0x00037e6b */ "eft",
-/* 0x000863be */ "scx",
-/* 0x000ffdf4 */ "pic", /* SoftImage PIC image */
-/* 0x00104639 */ "ric",
-/* 0x0010abbd */ "hz2",
-/* 0x001373d8 */ "trz",
-/* 0x001ced17 */ "lit",
-/* 0x001e5452 */ "tex",
-/* 0x002216e1 */ "brk",
-/* 0x0037b1e7 */ "hzt",
+/* sorted by frequency */
 /* 0x003b12fb */ "mdz",
-/* 0x003b530d */ "mtz",
-/* 0x00cb3b7a */ "cvz",
-/* 0x00ec22b5 */ "mdl",
-/* 0x00ed22c7 */ "mtl",
-/* 0x03696528 */ "fnt",
-/* 0x03799c56 */ "nhz",
-/* 0x038ab1d7 */ "mfl",
+/* 0x001e5452 */ "tex",
 /* 0x066e60c1 */ "flw",
+/* 0x000054d5 */ "o2d",
+/* 0x00ed22c7 */ "mtl",
+/* 0x0000856a */ "mts",
+/* 0x00cb3b7a */ "cvz",
+/* 0x0037b1e7 */ "hzt",
+/* 0x62877d7f */ "bin",
+/* 0x03696528 */ "fnt",
+/* 0x000863be */ "scx",
+/* 0x038ab1d7 */ "mfl",
+/* 0x001ced17 */ "lit",
+/* 0x0010abbd */ "hz2",
 /* 0x0688d9eb */ "ene",
+/* 0x00037e6b */ "eft",
+/* 0x001373d8 */ "trz",
 /* 0x398168e9 */ "row",
-/* 0x62877d7f */ "bin"
+/* 0x0000321e */ "rpd",
+/* 0x003b530d */ "mtz",
+/* 0x00104639 */ "ric",
+/* 0x00000e56 */ "var",
+/* 0x00004b0e */ "atr", // Not found in stage.dat
+/* 0x002216e1 */ "brk", // Not found in stage.dat
+/* 0x00ec22b5 */ "mdl", // Not found in stage.dat
+/* 0x03799c56 */ "nhz", // Not found in stage.dat
+/* 0x000ffdf4 */ "pic", // Not found in stage.dat
 };
 
 char *dateTimeString = "%d.%m.%Y %H:%M:%S";
