@@ -58,50 +58,69 @@ STAGEDIC = stage-dictionary.o
 # Targets
 #---------------------------------------------------------------------------#
 
+PROC_APPEND_EXT = mv $@ $@.elf
+
+ifeq ($(OS),Windows_NT)
+PROC_APPEND_EXT =
+endif
+
 # --- archive ---
 face-extract: $(STRCODE) $(LODEPNG) $(STAGEDIC) face-extract.c
 	$(CC) $(GCC_ARGS) -o $@ $^
+	$(PROC_APPEND_EXT)
 
 zar-extract: zar-extract.c
 	$(CC) $(GCC_ARGS) -o $@ $^ -lz
+	$(PROC_APPEND_EXT)
 
 qar-extract_psp: qar-extract_psp.c
 	$(CC) $(GCC_ARGS) -o $@ $<
+	$(PROC_APPEND_EXT)
 
 dat-merge: dat-merge.c
 	$(CC) $(GCC_ARGS) -o $@ $<
+	$(PROC_APPEND_EXT)
 
 # --- stage ---
 stage-extract: $(STRCODE) $(STAGEDIC) stage-extract.c
 	$(CC) $(GCC_ARGS) -o $@ $^
+	$(PROC_APPEND_EXT)
 
 dat-extract_enc: $(STRCODE) $(STAGEDIC) dat-extract_enc.c
 	$(CC) $(GCC_ARGS) -o $@ $^ -lz
+	$(PROC_APPEND_EXT)
 
 # --- dar ---
 dar-extract_pc: dar-extract_pc.c
 	$(CC) $(GCC_ARGS) -o $@ $<
+	$(PROC_APPEND_EXT)
 
 dar-extract_psx: $(STRCODE) $(STAGEDIC) dar-extract_psx.c
 	$(CC) $(GCC_ARGS) -o $@ $^
+	$(PROC_APPEND_EXT)
 
 dar-extract_psp: dar-extract_psp.c
 	$(CC) $(GCC_ARGS) -o $@ $<
+	$(PROC_APPEND_EXT)
 
 # --- dictionary ---
 simple-hash: $(STRCODE) simple-hash.c
 	$(CC) $(GCC_ARGS) -o $@ $^
+	$(PROC_APPEND_EXT)
 
 simple-hash-list: $(STRCODE) simple-hash-list.c
 	$(CC) $(GCC_ARGS) -o $@ $^
+	$(PROC_APPEND_EXT)
 
 # --- graphics ---
 txp-convert: $(LODEPNG) txp-convert.c
 	$(CC) $(GCC_ARGS) -o $@ $^ -lz
+	$(PROC_APPEND_EXT)
 
 # --- scripts ---
 gcx-decompile: gcx-decompile.c
 	$(CC) $(GCC_ARGS) -o $@ $<
+	$(PROC_APPEND_EXT)
 
 #---------------------------------------------------------------------------#
 
@@ -116,17 +135,4 @@ clean_obj:
 	-rm $(STAGEDIC)
 
 clean_exe:
-	-rm *.exe
-	-rm face-extract
-	-rm zar-extract
-	-rm qar-extract_psp
-	-rm dat-merge
-	-rm stage-extract
-	-rm dat-extract_enc
-	-rm dar-extract_pc
-	-rm dar-extract_psx
-	-rm dar-extract_psp
-	-rm simple-hash
-	-rm simple-hash-list
-	-rm txp-convert
-	-rm gcx-decompile
+	-rm *.exe *.elf
