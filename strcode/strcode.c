@@ -1,8 +1,9 @@
 /*
- * String Hash Functions
+ * KCE Japan West
+ * String Hash Library
  */
 
-// "METAL GEAR SOLID" 16-bit hash function
+/* "METAL GEAR SOLID" 16-bit Hash Function */
 unsigned int StrCode16( char *string )
 {
 	unsigned char c;
@@ -17,23 +18,23 @@ unsigned int StrCode16( char *string )
 	return id;
 }
 
-// "METAL GEAR SOLID 2" 24-bit hash function
+/* "METAL GEAR SOLID 2" 24-bit Hash Function */
 unsigned int StrCode24( char *string )
 {
 	unsigned char c;
 	unsigned char *p = (unsigned char *)string;
-	unsigned int id, mask = 0x00FFFFFF;
+	unsigned int id = 0, mask = 0x00FFFFFF;
 	
-	for ( id = 0 ; c = *p ; p++ )
+	while ( c = *p++ )
 	{
-		id = (( id >> 19 ) | ( id << 5 ));
+		id = (( id << 5 ) | ( id >> 19 ));
 		id += c;
 		id &= mask;
 	}
 	return ( !id ) ? 1 : id;
 }
 
-// "ZONE OF THE ENDERS" 32-bit hash function
+/* "ZONE OF THE ENDERS" 32-bit Hash Function */
 unsigned int StrCode32( char *string )
 {
 	unsigned int c;

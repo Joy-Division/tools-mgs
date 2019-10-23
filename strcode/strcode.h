@@ -1,16 +1,17 @@
 /*
- * String Hash Functions
+ * KCE Japan West
+ * String Hash Library
  */
 #ifndef INC_STRCODE_H
 #define INC_STRCODE_H
 
-// 16-bit hash used in MGS1
+/* "METAL GEAR SOLID" 16-bit Hash Function */
 unsigned int StrCode16( char *string );
 
-// 24-bit hash used in MGS2+
+/* "METAL GEAR SOLID 2" 24-bit Hash Function */
 unsigned int StrCode24( char *string );
 
-// 32-bit hash used in ZOE
+/* "ZONE OF THE ENDERS" 32-bit Hash Function */
 unsigned int StrCode32( char *string );
 
-#endif // INC_STRCODE_H
+#endif /* END OF FILE */
