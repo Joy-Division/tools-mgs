@@ -38,7 +38,7 @@ int writeFile( FILE *input, int length, FILE *output ) {
 
 int main( int argc, char **argv ) {
 	
-	char name[32];
+	char name[64];
 	uint32_t size, len;
 	unsigned int remember;
 	
@@ -66,7 +66,7 @@ int main( int argc, char **argv ) {
 		len++;
 		fseek(f, remember, SEEK_SET);
 		if((remember+len)%4) len+= 4-((remember+len)%4);
-		if(len > 32) {
+		if(len > 64) {
 			printf("namelen > 32!\n");
 			return 1;
 		}

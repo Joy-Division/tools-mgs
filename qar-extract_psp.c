@@ -43,7 +43,7 @@ int writeFile( FILE *input, int length, FILE *output ) {
 
 int main( int argc, char **argv ) {
 	
-	char name[32];
+	char name[64];
 	uint32_t len;
 	unsigned int remember;
 	
