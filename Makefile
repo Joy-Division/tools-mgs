@@ -1,142 +1,122 @@
-#
-# Makefile for "Arms Depot"
-# METAL GEAR SOLID Toolbox
-#
+##
+##	Makefile for "Arms Depot"
+##	( METAL GEAR SOLID Toolbox )
+##
 
-# Windows (MinGW)
-GCC_WIN32 = i686-w64-mingw32-gcc
-GXX_WIN32 = i686-w64-mingw32-g++
-GCC_WIN64 = x86_64-w64-mingw32-gcc
-GXX_WIN64 = x86_64-w64-mingw32-g++
+###############################################################################
 
-#---------------------------------------------------------------------------#
+OLEVEL                  ?= 2
+GLEVEL                  ?=
 
-CFLAGS = -Wall -g
+CFLAGS                  += -g$(GLEVEL)
+CFLAGS                  += -O$(OLEVEL)
+CFLAGS                  += -Wall -Wno-comment
 
-all:\
-	archive \
-	dictionary \
-	graphics \
-	scripts
+CXXFLAGS                := $(CFLAGS)
 
-archive:\
-	stage dar \
-	face-extract \
-	zar-extract \
-	qar-extract_psp \
-	dat-merge
+LDFLAGS                 += -Wl,-Map,$(basename $@).map
 
-stage:\
-	stage-extract \
-	dat-extract_enc
+###############################################################################
+.PHONY: default all
 
-dar:\
-	dar-extract_pc \
-	dar-extract_psx \
-	dar-extract_psp
+default: all
 
-dictionary:\
-	simple-hash \
-	simple-hash-list
+TARGETS                 :=\
+                        face-extract     \
+                        stage-extract    \
+                        dat-merge        \
+                        dat-extract_enc  \
+                        dar-extract_psx  \
+                        dar-extract_pc   \
+                        dar-extract_psp  \
+                        qar-extract_psp  \
+                        zar-extract      \
+                        simple-hash      \
+                        simple-hash-list \
+                        txp-convert      \
+                        gcx-decompile
 
-graphics:\
-	txp-convert
+all: $(TARGETS)
 
-scripts:\
-	gcx-decompile
+###############################################################################
 
-#---------------------------------------------------------------------------#
-# Objects
-#---------------------------------------------------------------------------#
-
-LODEPNG  = lodepng/lodepng.o
-STRCODE  = strcode/strcode.o
-STAGEDIC = stage-dictionary.o
+LODEPNG.O               := lodepng/lodepng.o
+STRCODE.O               := strcode/strcode.o
+STAGEDIC.O              := stage-dictionary.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-#---------------------------------------------------------------------------#
-# Targets
-#---------------------------------------------------------------------------#
+#------------------------------------------------------------------------------
+# ARCHIVE ( MGS1 *.dat )
+#------------------------------------------------------------------------------
 
-PROC_APPEND_EXT = mv $@ $@.elf
+face-extract: $(STRCODE.O) $(LODEPNG.O) $(STAGEDIC.O) face-extract.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-ifeq ($(OS),Windows_NT)
-PROC_APPEND_EXT =
-endif
+stage-extract: $(STRCODE.O) $(STAGEDIC.O) stage-extract.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-# --- archive ---
-face-extract: $(STRCODE) $(LODEPNG) $(STAGEDIC) face-extract.c
-	$(CC) $(CFLAGS) -o $@ $^
-	$(PROC_APPEND_EXT)
-
-zar-extract: zar-extract.c
-	$(CC) $(CFLAGS) -o $@ $^ -lz
-	$(PROC_APPEND_EXT)
-
-qar-extract_psp: qar-extract_psp.c
-	$(CC) $(CFLAGS) -o $@ $<
-	$(PROC_APPEND_EXT)
+#------------------------------------------------------------------------------
+# ARCHIVE ( MGS2+ *.dat )
+#------------------------------------------------------------------------------
 
 dat-merge: dat-merge.c
-	$(CC) $(CFLAGS) -o $@ $<
-	$(PROC_APPEND_EXT)
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
-# --- stage ---
-stage-extract: $(STRCODE) $(STAGEDIC) stage-extract.c
-	$(CC) $(CFLAGS) -o $@ $^
-	$(PROC_APPEND_EXT)
+dat-extract_enc: $(STRCODE.O) $(STAGEDIC.O) dat-extract_enc.c
+	$(CC) $(CFLAGS) -o $@ $^ -lz $(LDFLAGS)
 
-dat-extract_enc: $(STRCODE) $(STAGEDIC) dat-extract_enc.c
-	$(CC) $(CFLAGS) -o $@ $^ -lz
-	$(PROC_APPEND_EXT)
+#------------------------------------------------------------------------------
+# ARCHIVE ( dar/qar )
+#------------------------------------------------------------------------------
 
-# --- dar ---
+dar-extract_psx: $(STRCODE.O) $(STAGEDIC.O) dar-extract_psx.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
 dar-extract_pc: dar-extract_pc.c
-	$(CC) $(CFLAGS) -o $@ $<
-	$(PROC_APPEND_EXT)
-
-dar-extract_psx: $(STRCODE) $(STAGEDIC) dar-extract_psx.c
-	$(CC) $(CFLAGS) -o $@ $^
-	$(PROC_APPEND_EXT)
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
 dar-extract_psp: dar-extract_psp.c
-	$(CC) $(CFLAGS) -o $@ $<
-	$(PROC_APPEND_EXT)
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
-# --- dictionary ---
-simple-hash: $(STRCODE) simple-hash.c
-	$(CC) $(CFLAGS) -o $@ $^
-	$(PROC_APPEND_EXT)
+qar-extract_psp: qar-extract_psp.c
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
-simple-hash-list: $(STRCODE) simple-hash-list.c
-	$(CC) $(CFLAGS) -o $@ $^
-	$(PROC_APPEND_EXT)
+zar-extract: zar-extract.c
+	$(CC) $(CFLAGS) -o $@ $^ -lz $(LDFLAGS)
 
-# --- graphics ---
-txp-convert: $(LODEPNG) txp-convert.c
-	$(CC) $(CFLAGS) -o $@ $^ -lz
-	$(PROC_APPEND_EXT)
+#------------------------------------------------------------------------------
+# StrCode Utils
+#------------------------------------------------------------------------------
 
-# --- scripts ---
+simple-hash: $(STRCODE.O) simple-hash.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+simple-hash-list: $(STRCODE.O) simple-hash-list.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+#------------------------------------------------------------------------------
+# TEXTURE
+#------------------------------------------------------------------------------
+
+txp-convert: $(LODEPNG.O) txp-convert.c
+	$(CC) $(CFLAGS) -o $@ $^ -lz $(LDFLAGS)
+
+#------------------------------------------------------------------------------
+# GCL SCRIPT
+#------------------------------------------------------------------------------
+
 gcx-decompile: gcx-decompile.c
-	$(CC) $(CFLAGS) -o $@ $<
-	$(PROC_APPEND_EXT)
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
-#---------------------------------------------------------------------------#
-# Cleanup
-#---------------------------------------------------------------------------#
+###############################################################################
+.PHONY: clean
 
-clean:\
-	clean_obj \
-	clean_exe
-
-clean_obj:
-	-rm *.o
-	-rm $(LODEPNG)
-	-rm $(STRCODE)
-	-rm $(STAGEDIC)
-
-clean_exe:
-	-rm *.exe *.elf
+clean:
+	$(RM) *.o
+	$(RM) *.map
+	$(RM) $(LODEPNG.O)
+	$(RM) $(STRCODE.O)
+	$(RM) $(STAGEDIC.O)
+	$(RM) $(TARGETS)
