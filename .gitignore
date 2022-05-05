@@ -1,16 +1,12 @@
-# Project Config
-#-------------------------
 .vscode
 .vs
 
-# Objects/Libraries
-#-------------------------
-*.[Oo]
-*.[Aa]
-*.[Oo][Bb][Jj]
-*.[Ll][Ii][Bb]
+*.o
+*.a
+*.so
+*.elf
 
-# Binaries
-#-------------------------
-*.[Ee][Xx][Ee]
-*.[Ee][Ll][Ff]
+*.obj
+*.lib
+*.dll
+*.exe
